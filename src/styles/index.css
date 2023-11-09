@@ -10,3 +10,28 @@
     import 'relative/path/to/stylesheet.scss';
 
 */
+body{
+    margin-top:100px;
+}
+
+ul li{
+    border: 1px solid grey;
+    list-style: none;
+    padding: 7px;
+
+}
+
+h1{
+    text-align: center;
+}
+
+input{
+    border:none;
+    width:100%;
+}
+ul{ 
+    padding:0;
+    margin-bottom: 0%;}
+i{
+    float: right; 
+}
