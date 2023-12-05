@@ -4,9 +4,7 @@ import React, { useState, useEffect } from "react";
 const Home = () => {
 	const[ inputValue,setInputValue ] = useState("");
 	const[ todos,setTodos ] = useState([]);
-	// const[ todo,setTodoId ] = useState([]);
 
-	let url = "https://playground.4geeks.com/apis/fake/todos/user/Aleska";
 //mostrar
 let getMethod = {
 	method: "GET",
@@ -14,23 +12,6 @@ let getMethod = {
         "Content-Type": "application/json"
 	  },  
 }
-
-//eliminar
-// let deleteMethod = {
-// 	method: "DELETE",
-// 	headers: {
-//         "Content-Type": "application/json"
-// 	  }
-// }
-
-//crear
-// let postMethod = {
-// 	method: "POST",
-// 	headers: {
-// 		"Content-Type": "application/json"
-// 	},
-// 	BODY: []	
-// }
 
 
 //GET METHOD
@@ -56,33 +37,6 @@ useEffect(()=>{
 	console.log(todos);
 },[]);
 
-//POST METHOD (crear)
-// const createUser = () => {
-// 	fetch('https://playground.4geeks.com/apis/fake/todos/user/Aleska', postMethod)
-//     .then(resp => {
-// 		if (resp.status >= 200 && resp.status < 300){
-// 			console.log("El request se hizo bien");
-// 			return (resp.json());
-// 		}else{
-// 			console.log('Hubo un error ${resp.status} en el request');
-// 		}
-//     })
-//     .then(data => {
-// 		// let todosObject ={
-// 		// 	label : "",
-// 		// 	done: false
-// 		// };
-//         //Aquí es donde debe comenzar tu código después de que finalice la búsqueda
-//         data = data.map((t) => {
-// 			todosObject.label = t;
-// 		})
-//     })
-//     .catch(error => {
-//         //manejo de errores
-//         console.error(error);
-//     });
-// }
-
 
 //put method - agregar
 const updateTodos = (task) => {
@@ -107,9 +61,6 @@ const updateTodos = (task) => {
 		}
 		setTodos(todos.concat(todosObject));
     })  
-	// .then(data => {
-	// 	console.log(data);
-	// })
     .catch(error => {
         //manejo de errores
         console.error(error);
@@ -138,32 +89,59 @@ const deleteTodo = (taskIndex) => {
 		}else{
 			console.log(`Hubo un error ${resp.status} en el request`);
 		}
-		// setTodos(todos.splice(taskIndex,1));
 		let newList = todos.filter((t,currentIndex) => taskIndex != currentIndex)
 		console.log(newList);
 		setTodos(newList);
-		// let spliceTodo = todos.splice(taskIndex,1);
-		// console.log(spliceTodo);
-		// console.log(todos);
-    })  
-	// .then(data => {
-	// 	console.log(data);
 
-	// })
+    })  
     .catch(error => {
         //manejo de errores
         console.error(error);
     });
 }
 
+const clearTodos = () => {
+	let todosObject ={
+		label : "Example Task",
+		done: false
+	};
+	let putMethod = {
+		method: "PUT",
+		body: JSON.stringify([todosObject]),
+		headers: {
+			"Content-Type": "application/json"
+		  }
+	}
+	fetch('https://playground.4geeks.com/apis/fake/todos/user/Aleska', putMethod)
+    .then(resp => {
+
+		if (resp.status >= 200 && resp.status < 300){
+			console.log("El request se hizo bien");
+			return (resp.json());
+		}else{
+			console.log(`Hubo un error ${resp.status} en el request`);
+		}
+		
+		setTodos(todosObject);
+
+    })  
+
+    .catch(error => {
+        //manejo de errores
+        console.error(error);
+    });
+}
+
+
 //put method - delete todo
-const deleteTodos = (datoID) => {
+const deleteTodos = () => {
 
 	fetch(`https://playground.4geeks.com/apis/fake/todos/user/Aleska`,{ 
 		method: "DELETE",
 		headers: {
 			"Content-Type": "application/json"
-		  }
+		  },
+		//   PARAMS:none
 		}
 	)
     .then(resp => {
@@ -173,6 +151,7 @@ const deleteTodos = (datoID) => {
 		}else{
 			console.log(`Hubo un error ${resp.status} en el request`);
 		}
+		setTodos([]);
 		return(resp.json());
     })  
 	.then(data => {
@@ -227,6 +206,8 @@ const deleteTodos = (datoID) => {
 				))}				
 			</ul>
 			<div>{todos.length} items left</div>
+			<button onClick={()=>deleteTodos()}>Delete everything</button>
+			<button onClick={()=>clearTodos()}>Delete list</button>
 		</div>
 	);
 };
