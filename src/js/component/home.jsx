@@ -141,7 +141,6 @@ const deleteTodos = () => {
 		headers: {
 			"Content-Type": "application/json"
 		  },
-		//   PARAMS:none
 		}
 	)
     .then(resp => {

@@ -35,3 +35,17 @@ ul{
 i{
     float: right; 
 }
+button{
+    background-color: lightgreen;
+    margin: 5px;
+    border-radius: 5px;
+    padding: 5px;
+    border-style: inset;
+    border-width: 3px;
+}
+button:hover {
+    background-color: red;
+    color: white;
+    border-color: darkgoldenrod;
+    border-width: 4px;
+}
