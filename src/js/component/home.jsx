@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 const Home = () => {
 	const[ inputValue,setInputValue ] = useState("");
 	const[ todos,setTodos ] = useState([]);
-	const[ todoId,setTodoId ] = useState([]);
+	// const[ todo,setTodoId ] = useState([]);
 
 	let url = "https://playground.4geeks.com/apis/fake/todos/user/Aleska";
 //mostrar
@@ -116,22 +116,51 @@ const updateTodos = (task) => {
     });
 }
 
+
+const deleteTodo = (taskIndex) => {
+	let todosObject ={
+		label : taskIndex,
+		done: false
+	};
+	let putMethod = {
+		method: "PUT",
+		body: JSON.stringify(todos),
+		headers: {
+			"Content-Type": "application/json"
+		  }
+	}
+	fetch('https://playground.4geeks.com/apis/fake/todos/user/Aleska', putMethod)
+    .then(resp => {
+
+		if (resp.status >= 200 && resp.status < 300){
+			console.log("El request se hizo bien");
+			return (resp.json());
+		}else{
+			console.log(`Hubo un error ${resp.status} en el request`);
+		}
+		// setTodos(todos.splice(taskIndex,1));
+		let newList = todos.filter((t,currentIndex) => taskIndex != currentIndex)
+		console.log(newList);
+		setTodos(newList);
+		// let spliceTodo = todos.splice(taskIndex,1);
+		// console.log(spliceTodo);
+		// console.log(todos);
+    })  
+	// .then(data => {
+	// 	console.log(data);
+
+	// })
+    .catch(error => {
+        //manejo de errores
+        console.error(error);
+    });
+}
+
 //put method - delete todo
 const deleteTodos = (datoID) => {
-	
-	// let deleteMethod = {
-	// 	method: "DELETE",
-	// 	headers: {
-	// 		"Content-Type": "application/json"
-	// 	  }
-	// }
-	// let taskId = task.id;
 
-	fetch(`https://playground.4geeks.com/apis/fake/todos/user/Aleska/${datoID}`,{ 
+	fetch(`https://playground.4geeks.com/apis/fake/todos/user/Aleska`,{ 
 		method: "DELETE",
-		// mode: 'cors',
-		// credentials: 'include',
-		body:JSON.stringify({datoID}),
 		headers: {
 			"Content-Type": "application/json"
 		  }
@@ -148,7 +177,7 @@ const deleteTodos = (datoID) => {
     })  
 	.then(data => {
 		if(data.ok){
-		console.log('Dato eliminado:',data);
+		console.log('Lista eliminada');
 		}else{
 			console.log("Error in deletion")
 		}
@@ -173,8 +202,7 @@ const deleteTodos = (datoID) => {
 								updateTodos(inputValue);
 								setTodos(todos.concat(inputValue));
 								setInputValue('');
-								// setTodoId(todoId.concat(inputValue.id));
-								// console.log(todoId);
+								
 							}
 						}}
 						placeholder = "What needs to be done?">
@@ -185,7 +213,7 @@ const deleteTodos = (datoID) => {
 						<i 
 							className= "fa-sharp fa-solid fa-trash" 
 							onClick={()=>{
-								deleteTodos(item.id)
+								deleteTodo(index)
 								setTodos(
 									todos.filter((t,currentIndex) => index != currentIndex)
 										)
